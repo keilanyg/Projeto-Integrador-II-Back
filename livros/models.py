@@ -21,12 +21,9 @@ class Autor(models.Model):
     def __str__(self):
         return self.nome
 
-class Livros(models.Model):
+class Livro(models.Model):
     nome = models.CharField(max_length = 100)
     data_cadastro = models.DateField(auto_now_add= True)
-
-    class Meta:
-        verbose_name = 'Livro'
 
     def __str__(self):
         return self.nome
