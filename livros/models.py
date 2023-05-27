@@ -6,7 +6,6 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
     
-    
 class Editora(models.Model):
     nome = models.CharField(max_length=250, verbose_name="Editora")
 
@@ -17,25 +16,32 @@ class Autor(models.Model):
     class Meta: 
         verbose_name_plural = "Autores"
     
-    nome = models.CharField(max_length=250, verbose_name="Nome")
+    nome = models.CharField(max_length=250, verbose_name="Autor")
 
     def __str__(self):
         return self.nome
 
-class Livro(models.Model):
-    titulo = models.CharField(max_length=255, verbose_name="Título")
-    autor = models.ForeignKey(Autor, on_delete= models.PROTECT, verbose_name="Autor")
-    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, verbose_name="Categoria")
-    datacadastro = models.DateField(verbose_name="Data de Cadastro")
-    datalancamento = models.DateField(verbose_name="Data de Lançamento")
-    editora = models.ForeignKey(Editora, on_delete=models.PROTECT, verbose_name="Editora")
-    quantidade = models.IntegerField(verbose_name="Quantidade")
+class Livros(models.Model):
+    nome = models.CharField(max_length = 100)
+    data_cadastro = models.DateField(auto_now_add= True)
+
+    class Meta:
+        verbose_name = 'Livro'
 
     def __str__(self):
-        return self.titulo
+        return self.nome
     
 class Emprestimo(models.Model):
-    nome = models.CharField(max_length=255, verbose_name="Nome")
+    choices = (
+        ('P', 'Péssimo'),
+        ('R', 'Ruim'),
+        ('B', 'Bom'),
+        ('O', 'Ótimo')
+    )
+    nome_emprestado = models.CharField(max_length=255, verbose_name="Nome")
     dataemprestimo = models.DateField(verbose_name="Data de Empréstimo")
     datadevolucao = models.DateField(verbose_name="Data de Devolução")
-    livro = models.ForeignKey(Livro, on_delete=models.PROTECT, verbose_name="Livro a ser emprestado")
+    avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.nome_emprestado}"
