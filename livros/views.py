@@ -1,6 +1,6 @@
 from rest_framework import generics
-from livros.models import Categoria, Editora, Autor, Livro
-from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer
+from livros.models import Categoria, Editora, Autor, Livro, Emprestimo
+from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer
 
 # GET E POST
 class categorialist(generics.ListCreateAPIView):
@@ -41,4 +41,15 @@ class livrolist(generics.ListCreateAPIView):
 class detalhe_livro(generics.RetrieveUpdateDestroyAPIView):
     queryset = Livro.objects.all()
     serializer_class = LivrosSerializer
+
+# GET E POST 
+class emprestimolist(generics.ListCreateAPIView):
+    queryset = Emprestimo.objects.all()
+    serializer_class = EmprestimosSerializer
+
+# GET, PUT E DELETE -> (ID) 
+class detalhe_emprestimo(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Emprestimo.objects.all()
+    serializer_class = EmprestimosSerializer
+
  
