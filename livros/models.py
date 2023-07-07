@@ -30,6 +30,7 @@ class Livro(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora")
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor")
+    livro_imagem = models.ImageField
     
     def __str__(self):
         return self.nome_livro
