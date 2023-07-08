@@ -48,9 +48,17 @@ class Emprestimo(models.Model):
     avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
 
-
     def __str__(self):
         return self.nome_emprestado_usuario
+    
+def verificar_livros_emprestados():
+        total_livros = Livro.objects.count()
+        livros_emprestados = Emprestimo.objects.count()
+
+        return livros_emprestados
+    
+livros_emprestados = verificar_livros_emprestados()
+print(f"Total de livros emprestados: {livros_emprestados}")    
     
 
     
