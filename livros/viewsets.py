@@ -3,8 +3,8 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from livros.models import Categoria, Editora, Autor, Livro, Emprestimo
 from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer
-from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter
-
+from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter, EmprestimoFilter
+from rest_framework import generics
 from rest_framework.filters import SearchFilter
 
 class categoria(ModelViewSet):
@@ -38,5 +38,6 @@ class livro(ModelViewSet):
 class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Emprestimo.objects.all()
     serializer_class = EmprestimosSerializer
+    filter_class = EmprestimoFilter
     
     
