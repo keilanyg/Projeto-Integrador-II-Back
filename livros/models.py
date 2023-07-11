@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from django.http import request
 
 
 class Categoria(models.Model):
@@ -10,9 +11,9 @@ class Categoria(models.Model):
         return self.nome_categoria
 
     @method_decorator(permission_required('livros.adicionar_categoria'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
  
 class Editora(models.Model):
@@ -22,9 +23,9 @@ class Editora(models.Model):
         return self.nome_editora
     
     @method_decorator(permission_required('livros.adicionar_editora'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 class Autor(models.Model):
     class Meta: 
@@ -36,9 +37,9 @@ class Autor(models.Model):
         return self.nome_autor
     
     @method_decorator(permission_required('livros.adicionar_autor'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 
 class Livro(models.Model):
@@ -59,9 +60,9 @@ class Livro(models.Model):
         pass 
     
     @method_decorator(permission_required('livros.adicionar_livro'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
     
 
 """@permission_required('livros.adicionar_emprestimo') """  
@@ -77,14 +78,15 @@ class Emprestimo(models.Model):
     data_devolucao = models.DateField(verbose_name="Data de Devolução")
     avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
- 
+    #alerta_devolucao = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.nome_emprestado_usuario
     
     @method_decorator(permission_required('livros.adicionar_emprestimo'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
   
  
 def verificar_livros_emprestados():
