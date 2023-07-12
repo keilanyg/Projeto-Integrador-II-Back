@@ -1,11 +1,15 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
-from livros.models import Categoria, Editora, Autor, Livro, Emprestimo
-from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer
+from livros.models import Categoria, Editora, Autor, Livro, Emprestimo, Devolucao
+from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer, DevolucaoSerializer
 from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter, EmprestimoFilter
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
+import datetime
+from rest_framework.response import Response
+from rest_framework import status
+from core.models import User
 
 class categoria(ModelViewSet):
     queryset = Categoria.objects.all()
@@ -39,5 +43,25 @@ class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMo
     queryset = Emprestimo.objects.all()
     serializer_class = EmprestimosSerializer
     filter_class = EmprestimoFilter
+
+class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+    queryset = Devolucao.objects.all()
+    serializer_class = DevolucaoSerializer
     
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        emprestimo_obj = Emprestimo.objects.get(id=request.data["emprestimo"])
+        emprestimo_obj.delete()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+    
+    #filter_class = DevolucaoFilter
+    def devolver(self, livro):
+        devolucao = Devolucao.objects.create(emprestimo=self, data_devolucao=datetime.date.today(), usuario_devolucao=self.nome_emprestado_usuario)
+        #emprestimo = Emprestimo.objects.get(pk=self.pk)
+        if Emprestimo.objects.filter(pk=self.pk).exists():
+            livro.delete()
     

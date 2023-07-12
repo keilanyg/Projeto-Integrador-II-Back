@@ -2,9 +2,12 @@ from django.db import models
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.http import request
+from core.models import User
+from rest_framework.permissions import IsAuthenticated
 
 
 class Categoria(models.Model):
+    permission_class = [IsAuthenticated]
     nome_categoria = models.CharField(max_length=50, verbose_name="Categoria")
     
     def __str__(self):
@@ -28,6 +31,7 @@ class Editora(models.Model):
         return super().post(request, *args, **kwargs)
 
 class Autor(models.Model):
+    
     class Meta: 
         verbose_name_plural = "Autores"
     
@@ -64,30 +68,32 @@ class Livro(models.Model):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
     
+    
+    
 
 """@permission_required('livros.adicionar_emprestimo') """  
 class Emprestimo(models.Model):
-    choices = (
-        ('P', 'Péssimo'),
-        ('R', 'Ruim'),
-        ('B', 'Bom'),
-        ('O', 'Ótimo')
-    )
-    nome_emprestado_usuario = models.CharField(max_length=150, verbose_name="Nome Usuário Cadastrado")
+    nome_emprestado_usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário Cadastrado")
     data_emprestimo = models.DateField(verbose_name="Data de Empréstimo", auto_now_add=True)
-    data_devolucao = models.DateField(verbose_name="Data de Devolução")
-    avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
+    status = models.CharField(max_length=20, default="Emprestado")
+    
     #alerta_devolucao = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.nome_emprestado_usuario
+        return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
     
     @method_decorator(permission_required('livros.adicionar_emprestimo'))
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
-  
+    
+    def quantidade_emprestado(self):
+        obj =(Livro.objects.filter)
+        quant = self.livro.quantidade
+        num_emprestado = quant -1
+        num_disponivel = quant - num_emprestado
+        return("Quantidade de livros emprestados", num_emprestado, " Quantidade disponivel ", num_disponivel)
  
 def verificar_livros_emprestados():
         
@@ -100,3 +106,26 @@ def verificar_livros_emprestados():
 livros_emprestados = verificar_livros_emprestados()
 
 print(f"Total de livros emprestados: {livros_emprestados}")
+
+class Devolucao(models.Model):
+    choices = (
+        ('P', 'Péssimo'),
+        ('R', 'Ruim'),
+        ('B', 'Bom'),
+        ('O', 'Ótimo')
+    )
+    emprestimo = models.OneToOneField('livros.Emprestimo', on_delete=models.CASCADE, verbose_name="Livro")
+    observacoes = models.TextField(blank=True, null=True, verbose_name="Observações")
+    #usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
+    data_devolucao = models.DateField(verbose_name="Data de Devolução")
+    avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
+
+    def __str__(self):
+        return f"Devolução {self.emprestimo}"
+
+    @method_decorator(permission_required('livros.adicionar_devolucao'))
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    

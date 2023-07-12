@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
-from livros.models import Livro, Emprestimo, Categoria, Autor, Editora
+from livros.models import Livro, Emprestimo, Categoria, Autor, Editora, Devolucao
 
 adicionar_livro_permission = Permission.objects.create(
     codename='adicionar_livro',
@@ -32,6 +32,12 @@ adicionar_editora_permission = Permission.objects.create(
     content_type=ContentType.objects.get_for_model(Editora)
 )
 
+adicionar_devolucao_permission = Permission.objects.create(
+    codename='adicionar_devolucao',
+    name='Pode adicionar devolução',
+    content_type=ContentType.objects.get_for_model(Devolucao)
+)
+
 #chamando os grupos
 grupo1 = Group.objects.get(name='administrador')
 grupo2 = Group.objects.get(name='bibliotecario')
@@ -41,6 +47,7 @@ permissao1 = Permission.objects.get(codename='adicionar_livro')
 permissao2 = Permission.objects.get(codename='adicionar_categoria')
 permissao3 = Permission.objects.get(codename='adicionar_editora')
 permissao4 = Permission.objects.get(codename='adicionar_autor')
+permissao5 = Permission.objects.get(codename='adicionar_devolucao')
 
 # Adiciona as permissões ao grupo
-grupo2.permissions.add(permissao1, permissao2, permissao3 ,permissao4)
+grupo2.permissions.add(permissao1, permissao2, permissao3 ,permissao4, permissao5)
