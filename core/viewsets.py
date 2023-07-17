@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from core.models import User
-from core.serializers import UserSerializer
+from core.models import User, UserManager, AdministradorUser
+from core.serializers import UserSerializer, AdministradorUserSerializer
 from . filter import EmprestimoUsuarioFilter
 from django.shortcuts import render
 from datetime import date, timedelta
@@ -11,7 +11,10 @@ class user(ModelViewSet):
     serializer_class = UserSerializer
     filter_class = EmprestimoUsuarioFilter
     
-
+class useradministrador(ModelViewSet):
+    queryset = AdministradorUser.objects.all()
+    serializer_class = AdministradorUserSerializer
+    filter_class = EmprestimoUsuarioFilter
 
 def emprestimos_user(request):
     usuario = request.user  # Obtém o usuário atualmente logado
