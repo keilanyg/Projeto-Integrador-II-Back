@@ -58,14 +58,14 @@ class AdministradorUser(AbstractUser):
         verbose_name='groups',
         blank=True,
         help_text='The groups this user belongs to.',
-        related_name='administrador_users'  # Adicione o related_name aqui
+        related_name='administradores'  # Adicione o related_name aqui
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
         blank=True,
         help_text='Specific permissions for this user.',
-        related_name='administrador_users'  # Adicione o related_name aqui
+        related_name='administradores'  
     )
 
     def __str__(self):
