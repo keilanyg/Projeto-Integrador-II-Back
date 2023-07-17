@@ -4,16 +4,17 @@ from django.utils.decorators import method_decorator
 from django.http import request
 from core.models import User
 from rest_framework.permissions import IsAuthenticated
+from core.permissions import IsAdministradores, IsBibliotecario, IsUsuarios
 
 
 class Categoria(models.Model):
-    permission_class = [IsAuthenticated]
+    permission_class = [IsAuthenticated & (IsBibliotecario)]
     nome_categoria = models.CharField(max_length=50, verbose_name="Categoria")
     
     def __str__(self):
         return self.nome_categoria
 
-    @method_decorator(permission_required('livros.adicionar_categoria'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -25,7 +26,7 @@ class Editora(models.Model):
     def __str__(self):
         return self.nome_editora
     
-    @method_decorator(permission_required('livros.adicionar_editora'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -40,7 +41,7 @@ class Autor(models.Model):
     def __str__(self):
         return self.nome_autor
     
-    @method_decorator(permission_required('livros.adicionar_autor'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -55,7 +56,7 @@ class Livro(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora")
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor")
-    livro_imagem = models.ImageField
+    cover = models.ImageField(upload_to='livros/covers/%Y/%m/%d/') #campo para receber imagem que vai colocar dentro da pasta livros/cover junto com o ano, mês e dia
     
     def __str__(self):
         return self.nome_livro
@@ -63,7 +64,7 @@ class Livro(models.Model):
     def quantidade_emprestado(quantidade):
         pass 
     
-    @method_decorator(permission_required('livros.adicionar_livro'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -83,7 +84,7 @@ class Emprestimo(models.Model):
     def __str__(self):
         return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
     
-    @method_decorator(permission_required('livros.adicionar_emprestimo'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -123,7 +124,7 @@ class Devolucao(models.Model):
     def __str__(self):
         return f"Devolução {self.emprestimo}"
 
-    @method_decorator(permission_required('livros.adicionar_devolucao'))
+    
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)

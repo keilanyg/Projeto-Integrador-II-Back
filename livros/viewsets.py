@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import mixins
+from rest_framework import mixins, permissions
 from rest_framework.viewsets import GenericViewSet
 from livros.models import Categoria, Editora, Autor, Livro, Emprestimo, Devolucao
 from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer, DevolucaoSerializer
@@ -10,8 +10,11 @@ import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from core.models import User
+from core.permissions import IsBibliotecario, IsAdministradores, IsUsuarios
+from rest_framework.permissions import IsAuthenticated
 
 class categoria(ModelViewSet):
+    permission_classes = [IsAuthenticated & (IsBibliotecario)]
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     filterset_class = CategoriaFilter
@@ -33,6 +36,7 @@ class autor(ModelViewSet):
     search_fields = ('nome_autor',)
 
 class livro(ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Livro.objects.all()
     serializer_class = LivrosSerializer
     filterset_class = LivroFilter

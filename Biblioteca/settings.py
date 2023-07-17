@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-1qd%bcibva7o&c8$zyqmh1^8i1(y68(ks29j9let*mnq_l*)j3
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,13 +45,10 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
-    
 }
 
 ROOT_URLCONF = 'Biblioteca.urls'
@@ -136,3 +133,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API com os Endpoints',
     'VERSION': '1.0.0',
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
