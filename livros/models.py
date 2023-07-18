@@ -61,9 +61,6 @@ class Livro(models.Model):
     def __str__(self):
         return self.nome_livro
     
-    def quantidade_emprestado(quantidade):
-        pass 
-    
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

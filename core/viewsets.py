@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from core.models import User, UserManager, AdministradorUser
+from core.models import User, AdministradorUser
 from core.serializers import UserSerializer, AdministradorUserSerializer
 from . filter import EmprestimoUsuarioFilter
 from django.shortcuts import render

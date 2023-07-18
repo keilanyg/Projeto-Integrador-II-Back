@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     
     'django_filters',
+    'notifications',
 ]
 SITE_ID = 1
 

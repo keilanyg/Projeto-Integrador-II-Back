@@ -12,6 +12,8 @@ from rest_framework import status
 from core.models import User
 from core.permissions import IsBibliotecario, IsAdministradores, IsUsuarios
 from rest_framework.permissions import IsAuthenticated
+from notifications.signals import notify
+
 
 class categoria(ModelViewSet):
     permission_classes = [IsAuthenticated & (IsBibliotecario)]
@@ -43,10 +45,19 @@ class livro(ModelViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ('nome_livro',)
     
+    def quantidade_emprestado(quantidade):
+        pass 
+      
 class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Emprestimo.objects.all()
     serializer_class = EmprestimosSerializer
     filter_class = EmprestimoFilter
+    
+    """def notificacao(request):
+        
+        user = User.objects.get(id = id)
+        notify.send(request.user, recipent="user")"""
+        
 
 class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Devolucao.objects.all()
