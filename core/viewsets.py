@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from core.models import User, AdministradorUser
-from core.serializers import UserSerializer, AdministradorUserSerializer
+from core.serializers import UserSerializer, AdministradorUserSerializer, BibliotecarioSerializer
 from . filter import EmprestimoUsuarioFilter
 from django.shortcuts import render
 from datetime import date, timedelta
@@ -29,6 +29,18 @@ class useradministrador(ModelViewSet):
     queryset = AdministradorUser.objects.all()
     serializer_class = AdministradorUserSerializer
     filter_class = EmprestimoUsuarioFilter
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        liv= request.data
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        user = User.objects.get(email=liv['email'])
+        headers = self.get_success_headers(serializer.data)
+        grupo = Group.objects.get(name="administradores")
+        user.groups.add(grupo)
+        user.save()
+        return Response(serializer.data, headers=headers)
 
 def emprestimos_user(request):
     usuario = request.user  # Obtém o usuário atualmente logado
@@ -41,3 +53,11 @@ def emprestimos_user(request):
             emprestimo.save()
 
     return render(request, 'emprestimos.html', {'emprestimos': emprestimos})
+
+def criar_perfil_bibliotecario(request):
+    if request.method == 'POST':
+        serializer = BibliotecarioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
