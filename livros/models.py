@@ -8,9 +8,9 @@ from core.permissions import IsAdministradores, IsBibliotecario, IsUsuarios
 
 
 class Categoria(models.Model):
-    permission_class = [IsAuthenticated & (IsBibliotecario)]
+    #permission_class = [IsAuthenticated & (IsBibliotecario)]
     nome_categoria = models.CharField(max_length=50, verbose_name="Categoria")
-    
+
     def __str__(self):
         return self.nome_categoria
 
@@ -56,7 +56,7 @@ class Livro(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora")
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor")
-    cover = models.ImageField(upload_to='livros/covers/%Y/%m/%d/') #campo para receber imagem que vai colocar dentro da pasta livros/cover junto com o ano, mês e dia
+    cover = models.ImageField() #campo para receber imagem que vai colocar dentro da pasta livros/cover junto com o ano, mês e dia
     
     def __str__(self):
         return self.nome_livro

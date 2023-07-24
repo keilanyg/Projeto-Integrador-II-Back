@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.views import TokenVerifyView
-
+from django.conf import settings
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
@@ -25,6 +25,7 @@ urlpatterns = [
     
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+        
     
-    
-]
+] + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
+

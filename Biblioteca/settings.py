@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import Path, os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -6,7 +6,8 @@ SECRET_KEY = 'django-insecure-1qd%bcibva7o&c8$zyqmh1^8i1(y68(ks29j9let*mnq_l*)j3
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS=True
 
 # Application definition
 INSTALLED_APPS = [
@@ -19,7 +20,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'livros',
     'core',
-    
+    'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
@@ -31,7 +32,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     
     'django_filters',
-    'notifications',
 ]
 SITE_ID = 1
 
@@ -43,6 +43,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 ]
 
 REST_FRAMEWORK = {
@@ -120,7 +123,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -135,7 +138,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'core.User'

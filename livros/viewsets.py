@@ -12,11 +12,10 @@ from rest_framework import status
 from core.models import User
 from core.permissions import IsBibliotecario, IsAdministradores, IsUsuarios
 from rest_framework.permissions import IsAuthenticated
-from notifications.signals import notify
 
 
 class categoria(ModelViewSet):
-    permission_classes = [IsAuthenticated & (IsBibliotecario)]
+    #permission_classes = [IsAuthenticated & (IsBibliotecario)]
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     filterset_class = CategoriaFilter
@@ -38,7 +37,7 @@ class autor(ModelViewSet):
     search_fields = ('nome_autor',)
 
 class livro(ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
     queryset = Livro.objects.all()
     serializer_class = LivrosSerializer
     filterset_class = LivroFilter
