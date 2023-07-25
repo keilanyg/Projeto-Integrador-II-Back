@@ -3,7 +3,7 @@ from rest_framework import mixins, permissions
 from rest_framework.viewsets import GenericViewSet
 from livros.models import Categoria, Editora, Autor, Livro, Emprestimo, Devolucao
 from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer, DevolucaoSerializer
-from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter, EmprestimoFilter
+from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter, EmprestimoFilter, DevolucaoFilter
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
 import datetime
@@ -37,7 +37,7 @@ class autor(ModelViewSet):
     search_fields = ('nome_autor',)
 
 class livro(ModelViewSet):
-    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Livro.objects.all()
     serializer_class = LivrosSerializer
     filterset_class = LivroFilter
@@ -72,10 +72,13 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
     
-    #filter_class = DevolucaoFilter
+    filter_class = DevolucaoFilter
     def devolver(self, livro):
         devolucao = Devolucao.objects.create(emprestimo=self, data_devolucao=datetime.date.today(), usuario_devolucao=self.nome_emprestado_usuario)
         #emprestimo = Emprestimo.objects.get(pk=self.pk)
         if Emprestimo.objects.filter(pk=self.pk).exists():
             livro.delete()
+            def post(self, request, *args, **kwargs):
+                self.object = self.get_object()
+                return super().post(request, *args, **kwargs)
     

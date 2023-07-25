@@ -1,15 +1,11 @@
 from rest_framework import serializers
-from core.models import User, AdministradorUser, Bibliotecario
+from core.models import User, Bibliotecario
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
             
-class AdministradorUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AdministradorUser
-        fields = '__all__'
         
         
 class BibliotecarioSerializer(serializers.ModelSerializer):

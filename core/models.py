@@ -40,36 +40,6 @@ class UserType(models.Model):
     name = models.CharField(max_length=100)
 
 
-class AdministradorUser(AbstractUser):
-    email = models.EmailField(unique=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    title = models.CharField(max_length=100)
-
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    objects = UserManager()
-
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        related_name='administradores'  # Adicione o related_name aqui
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name='administradores'  
-    )
-
-    def __str__(self):
-        return self.email
     
 class Bibliotecario(models.Model):
     nome = models.CharField(max_length=100)

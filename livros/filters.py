@@ -3,12 +3,12 @@ from django_filters import FilterSet
 from datetime import timezone, timedelta
 from dateutil.relativedelta import relativedelta 
 
-from .models import Livro, Categoria, Editora, Autor, Emprestimo
+from .models import Livro, Categoria, Editora, Autor, Emprestimo, Devolucao
 from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
-from .serializers import LivrosSerializer, CategoriaSerializer, AutorSerializer, EditoraSerializer
+from .serializers import LivrosSerializer, CategoriaSerializer, AutorSerializer, EditoraSerializer, DevolucaoSerializer
 
 class LivroFilter(FilterSet):
     class Meta:
@@ -90,3 +90,18 @@ class EmprestimoFilter(filters.FilterSet):
     class Meta:
         model = Emprestimo
         fields = ['period']
+        
+class DevolucaoFilter(FilterSet):
+    class Meta:
+        model = Devolucao
+        fields = {
+            'emprestimo': ['exact'],
+        }
+   
+        
+class DevolucaoViewSet(viewsets.ModelViewSet):
+    queryset = Devolucao.objects.all()
+    serializer_class = DevolucaoSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = DevolucaoFilter
+    search_fields = ['emprestimo']

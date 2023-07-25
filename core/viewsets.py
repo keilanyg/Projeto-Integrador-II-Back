@@ -1,12 +1,23 @@
 from rest_framework.viewsets import ModelViewSet
-from core.models import User, AdministradorUser
-from core.serializers import UserSerializer, AdministradorUserSerializer, BibliotecarioSerializer
+from core.models import User
+from core.serializers import UserSerializer, BibliotecarioSerializer
 from . filter import EmprestimoUsuarioFilter
 from django.shortcuts import render
 from datetime import date, timedelta
 from livros.models import Emprestimo
 from rest_framework.response import Response
 from django.contrib.auth.models import Group
+
+from django.contrib.auth import password_validation
+from django.contrib.auth.hashers import (
+    check_password,
+    is_password_usable,
+    make_password,
+)
+
+from django.utils.crypto import get_random_string, salted_hmac
+from django.utils.translation import gettext_lazy as _
+
 
 class user(ModelViewSet):
     queryset = User.objects.all()
@@ -15,32 +26,14 @@ class user(ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        print(request.data)
         liv= request.data
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        User.objects.create_user(email=request.data['email'],password=request.data['password'])
         user = User.objects.get(email=liv['email'])
-        headers = self.get_success_headers(serializer.data)
         grupo = Group.objects.get(name="usuarios")
         user.groups.add(grupo)
-        user.save()
-        return Response(serializer.data, headers=headers)
-    
-class useradministrador(ModelViewSet):
-    queryset = AdministradorUser.objects.all()
-    serializer_class = AdministradorUserSerializer
-    filter_class = EmprestimoUsuarioFilter
-    
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        liv= request.data
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        user = User.objects.get(email=liv['email'])
-        headers = self.get_success_headers(serializer.data)
-        grupo = Group.objects.get(name="administradores")
-        user.groups.add(grupo)
-        user.save()
-        return Response(serializer.data, headers=headers)
+        return Response("ok") 
 
 def emprestimos_user(request):
     usuario = request.user  # Obtém o usuário atualmente logado
