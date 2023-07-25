@@ -17,9 +17,12 @@ class AutorSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class LivrosSerializer(serializers.ModelSerializer):
+    autor = AutorSerializer(read_only = True)
+    categoria = CategoriaSerializer(read_only = True)
+    editora = EditoraSerializer(read_only = True)
     class Meta:
         model = Livro
-        fields = '__all__'
+        fields = ['nome_livro','data_cadastro', 'data_lancamento', 'quantidade', 'descricao_livro', 'categoria', 'editora',  'autor', 'cover']
         
     def quantidade_emprestado(self):
         obj =(Emprestimo.objects.filter)
