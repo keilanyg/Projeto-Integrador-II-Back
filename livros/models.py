@@ -74,7 +74,7 @@ class Emprestimo(models.Model):
     nome_emprestado_usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário Cadastrado")
     data_emprestimo = models.DateField(verbose_name="Data de Empréstimo", auto_now_add=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
-    status = models.CharField(max_length=20, default="Emprestado")
+    
     
     #alerta_devolucao = models.BooleanField(default=False)
     

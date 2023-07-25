@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from livros.models import Categoria, Editora, Autor, Livro, Emprestimo, Devolucao
+from core.serializers import UserSerializer
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,12 +33,17 @@ class LivrosSerializer(serializers.ModelSerializer):
         return("Quantidade de livros emprestados", num_emprestado, " Quantidade disponivel ", num_disponivel)
         
 class EmprestimosSerializer(serializers.ModelSerializer):
+    nome_emprestado_usuario = UserSerializer(read_only = True)
+    livro = LivrosSerializer(read_only = True)
     class Meta:
         model = Emprestimo
-        fields = "__all__"
+        fields = ['nome_emprestado_usuario', 'livro']
         
         
 class DevolucaoSerializer(serializers.ModelSerializer):
+    emprestimo = EmprestimosSerializer(read_only = True)
+    
+    
     class Meta:
         model = Devolucao
-        fields = "__all__"
+        fields = ['emprestimo']

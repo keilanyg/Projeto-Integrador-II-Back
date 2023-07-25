@@ -44,8 +44,16 @@ class livro(ModelViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ('nome_livro',)
     
-    def quantidade_emprestado(quantidade):
-        pass 
+    """livros_emprestar = Livro.objects.filter(user = User).filter(emprestado = False)
+    livros_emprestados = Livro.objects.filter(user = User).filter(emprestado = True)"""
+    
+    def ver_livros(request, id):
+        if request.session.get('usuario'):
+            livro = Livro.objects.get(id = id)
+            if request.session.get('usuario') == livro.usuario.id:
+                user = User.objects.get(id = request.session['user'])
+                print (user)
+      
       
 class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Emprestimo.objects.all()
@@ -81,4 +89,7 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
             def post(self, request, *args, **kwargs):
                 self.object = self.get_object()
                 return super().post(request, *args, **kwargs)
+            
+    def schoolings(self, request, *args, **kwarg):
+        return Response(User.SCHOOLING_CHOICES)
     
