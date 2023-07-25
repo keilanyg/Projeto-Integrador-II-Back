@@ -29,7 +29,7 @@ class user(ModelViewSet):
         print(request.data)
         liv= request.data
         serializer.is_valid(raise_exception=True)
-        User.objects.create_user(email=request.data['email'],password=request.data['password'])
+        User.objects.create_user(email=request.data['email'],password=request.data['password'], username=request.data['username'])
         user = User.objects.get(email=liv['email'])
         grupo = Group.objects.get(name="usuarios")
         user.groups.add(grupo)
