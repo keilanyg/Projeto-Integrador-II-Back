@@ -12,6 +12,7 @@ from rest_framework import status
 from core.models import User
 from core.permissions import IsBibliotecario, IsAdministradores, IsUsuarios
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 
 class categoria(ModelViewSet):
@@ -37,7 +38,7 @@ class autor(ModelViewSet):
     search_fields = ('nome_autor',)
 
 class livro(ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
+    #permission_classes = (permissions.IsAuthenticated,)
     queryset = Livro.objects.all()
     serializer_class = LivrosSerializer
     filterset_class = LivroFilter
@@ -60,15 +61,26 @@ class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMo
     serializer_class = EmprestimosSerializer
     filter_class = EmprestimoFilter
     
-    """def notificacao(request):
-        
-        user = User.objects.get(id = id)
-        notify.send(request.user, recipent="user")"""
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    def quantidade_emprestado(self):
+        obj =(Livro.objects.filter)
+        quant = self.livro.quantidade
+        num_emprestado = quant -1
+        num_disponivel = quant - num_emprestado
+        return("Quantidade de livros emprestados", num_emprestado, " Quantidade disponivel ", num_disponivel)
+ 
+    
+    def __str__(self):
+        return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
         
 
 class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Devolucao.objects.all()
     serializer_class = DevolucaoSerializer
+    filter_class = DevolucaoFilter
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -80,16 +92,25 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
     
-    filter_class = DevolucaoFilter
+    
     def devolver(self, livro):
         devolucao = Devolucao.objects.create(emprestimo=self, data_devolucao=datetime.date.today(), usuario_devolucao=self.nome_emprestado_usuario)
         #emprestimo = Emprestimo.objects.get(pk=self.pk)
+        
         if Emprestimo.objects.filter(pk=self.pk).exists():
             livro.delete()
             def post(self, request, *args, **kwargs):
                 self.object = self.get_object()
                 return super().post(request, *args, **kwargs)
             
-    def schoolings(self, request, *args, **kwarg):
-        return Response(User.SCHOOLING_CHOICES)
+    def avaliacaochoices(self, request, *args, **kwarg):
+        return Response(User.AVAIALCAOCHOICES_CHOICES)
+    
+    """def ver_devolucao(request, id):
+        if request.session.get('usuario'):
+            devolucao = get_object_or_404(Devolucao, id=id)
+            if request.session.get('usuario') == devolucao.usuario.id:
+                user = request.session.get('usuario')
+                print(user)"""
+    
     

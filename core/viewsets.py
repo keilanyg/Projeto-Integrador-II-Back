@@ -35,22 +35,20 @@ class user(ModelViewSet):
         user.groups.add(grupo)
         return Response("ok") 
 
-def emprestimos_user(request):
-    usuario = request.user  # Obtém o usuário atualmente logado
-    emprestimos = Emprestimo.objects.filter(usuario=usuario)
+    """def emprestimos_user(request):
+        usuario = request.user  # Obtém o usuário atualmente logado
+        emprestimos = Emprestimo.objects.filter(usuario=usuario)
 
-    # Verificar se há empréstimos próximos à data de devolução
-    for emprestimo in emprestimos:
-        if emprestimo.data_devolucao - date.today() <= timedelta(days=5):
-            emprestimo.alerta_devolucao = True
-            emprestimo.save()
+        # Verificar se há empréstimos próximos à data de devolução
+        for emprestimo in emprestimos:
+            if emprestimo.data_devolucao - date.today() <= timedelta(days=5):
+                emprestimo.alerta_devolucao = True
+                emprestimo.save()"""
 
-    return render(request, 'emprestimos.html', {'emprestimos': emprestimos})
-
-def criar_perfil_bibliotecario(request):
-    if request.method == 'POST':
-        serializer = BibliotecarioSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+    def criar_perfil_bibliotecario(request):
+        if request.method == 'POST':
+            serializer = BibliotecarioSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors)

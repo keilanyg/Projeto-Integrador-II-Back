@@ -75,9 +75,6 @@ class Emprestimo(models.Model):
     data_emprestimo = models.DateField(verbose_name="Data de Empréstimo", auto_now_add=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
     
-    
-    #alerta_devolucao = models.BooleanField(default=False)
-    
     def __str__(self):
         return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
     
@@ -86,13 +83,7 @@ class Emprestimo(models.Model):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
     
-    def quantidade_emprestado(self):
-        obj =(Livro.objects.filter)
-        quant = self.livro.quantidade
-        num_emprestado = quant -1
-        num_disponivel = quant - num_emprestado
-        return("Quantidade de livros emprestados", num_emprestado, " Quantidade disponivel ", num_disponivel)
- 
+    
 def verificar_livros_emprestados():
         
     total_livros = Livro.objects.count()
@@ -113,8 +104,7 @@ class Devolucao(models.Model):
         ('O', 'Ótimo')
     )
     emprestimo = models.OneToOneField('livros.Emprestimo', on_delete=models.CASCADE, verbose_name="Livro")
-    observacoes = models.TextField(blank=True, null=True, verbose_name="Observações")
-    #usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
+    usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
     data_devolucao = models.DateField(verbose_name="Data de Devolução")
     avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
 
