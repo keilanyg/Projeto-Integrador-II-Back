@@ -99,7 +99,7 @@ print(f"Total de livros emprestados: {livros_emprestados}")
 class Devolucao(models.Model):
     choices = (
         ('PESSIMO', 'Péssimo'),
-        ('RRUIM', 'Ruim'),
+        ('RUIM', 'Ruim'),
         ('BOM', 'Bom'),
         ('OTIMO', 'Ótimo')
     )
