@@ -84,17 +84,17 @@ class Emprestimo(models.Model):
         return super().post(request, *args, **kwargs)
     
     
-def verificar_livros_emprestados():
+""" def verificar_livros_emprestados():
         
     total_livros = Livro.objects.count()
     livros_emprestados = Emprestimo.objects.count()
 
-    return livros_emprestados
+    return livros_emprestados """
 
 # Chamada da função para obter o número de livros emprestados
-livros_emprestados = verificar_livros_emprestados()
+#livros_emprestados = verificar_livros_emprestados()
 
-print(f"Total de livros emprestados: {livros_emprestados}")
+#print(f"Total de livros emprestados: {livros_emprestados}")
 
 class Devolucao(models.Model):
     choices = (
@@ -103,7 +103,7 @@ class Devolucao(models.Model):
         ('BOM', 'Bom'),
         ('OTIMO', 'Ótimo')
     )
-    emprestimo = models.OneToOneField('livros.Emprestimo', on_delete=models.CASCADE, verbose_name="Livro")
+    emprestimo = models.OneToOneField(Emprestimo, on_delete=models.CASCADE, verbose_name="Livro")
     usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
     data_devolucao = models.DateField(verbose_name="Data de Devolução")
     avaliacao = models.CharField(max_length=10, choices=choices, null=True, blank=True)
@@ -116,4 +116,5 @@ class Devolucao(models.Model):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
     
-    
+
+

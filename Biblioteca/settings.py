@@ -1,4 +1,8 @@
 from pathlib import Path, os
+import environ 
+
+env = environ.Env()
+environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -79,8 +83,12 @@ WSGI_APPLICATION = 'Biblioteca.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST':'localhost',
+        'PORT': '5432'
     }
 }
 
