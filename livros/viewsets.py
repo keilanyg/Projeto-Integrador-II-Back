@@ -12,7 +12,7 @@ from rest_framework import status
 from core.models import User
 from core.permissions import IsBibliotecario, IsAdministradores, IsUsuarios
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 
 class categoria(ModelViewSet):
@@ -82,15 +82,8 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
     serializer_class = DevolucaoSerializer
     filter_class = DevolucaoFilter
     
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        emprestimo_obj = Emprestimo.objects.get(id=request.data["emprestimo"])
-        emprestimo_obj.delete()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        
+    """
+        """
     
     
     def devolver(self, livro):
@@ -104,13 +97,17 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
                 return super().post(request, *args, **kwargs)
             
     def avaliacaochoices(self, request, *args, **kwarg):
-        return Response(User.AVAIALCAOCHOICES_CHOICES)
+        return Response(Devolucao.AVAIALCAOCHOICES_CHOICES)
     
-    """def ver_devolucao(request, id):
-        if request.session.get('usuario'):
-            devolucao = get_object_or_404(Devolucao, id=id)
-            if request.session.get('usuario') == devolucao.usuario.id:
-                user = request.session.get('usuario')
-                print(user)"""
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        emprestimo_obj = Emprestimo.objects.get(id=request.data["emprestimo"])
+        emprestimo_obj.delete()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    
     
     

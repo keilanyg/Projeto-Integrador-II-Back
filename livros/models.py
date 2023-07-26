@@ -98,15 +98,15 @@ print(f"Total de livros emprestados: {livros_emprestados}")
 
 class Devolucao(models.Model):
     choices = (
-        ('P', 'Péssimo'),
-        ('R', 'Ruim'),
-        ('B', 'Bom'),
-        ('O', 'Ótimo')
+        ('PESSIMO', 'Péssimo'),
+        ('RRUIM', 'Ruim'),
+        ('BOM', 'Bom'),
+        ('OTIMO', 'Ótimo')
     )
     emprestimo = models.OneToOneField('livros.Emprestimo', on_delete=models.CASCADE, verbose_name="Livro")
     usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
     data_devolucao = models.DateField(verbose_name="Data de Devolução")
-    avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
+    avaliacao = models.CharField(max_length=10, choices=choices, null=True, blank=True)
 
     def __str__(self):
         return f"Devolução {self.emprestimo}"
