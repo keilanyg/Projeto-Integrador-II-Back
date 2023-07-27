@@ -82,22 +82,20 @@ class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMod
     serializer_class = DevolucaoSerializer
     filter_class = DevolucaoFilter
     
-    """
-        """
-    
     
     def devolver(self, livro):
-        devolucao = Devolucao.objects.create(emprestimo=self, data_devolucao=datetime.date.today(), usuario_devolucao=self.nome_emprestado_usuario)
-        #emprestimo = Emprestimo.objects.get(pk=self.pk)
-        
-        if Emprestimo.objects.filter(pk=self.pk).exists():
+        try:
+            emprestimo = Emprestimo.objects.get(pk=self.pk)
+            devolucao = Devolucao.objects.create(
+                emprestimo=emprestimo,
+                data_devolucao=datetime.date.today(),
+                usuario_devolucao=self.nome_emprestado_usuario
+            )
             livro.delete()
-            def post(self, request, *args, **kwargs):
-                self.object = self.get_object()
-                return super().post(request, *args, **kwargs)
-            
-    def avaliacaochoices(self, request, *args, **kwarg):
-        return Response(Devolucao.AVAIALCAOCHOICES_CHOICES)
+
+            return Response("Livro devolvido com sucesso!")
+        except Emprestimo.DoesNotExist:
+            return Response("Empréstimo não encontrado.", status=status.HTTP_404_NOT_FOUND)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

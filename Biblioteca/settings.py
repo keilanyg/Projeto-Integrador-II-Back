@@ -18,18 +18,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    
     'livros',
     'core',
+    
     'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    
     'dj_rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     
     'django_filters',
 ]
@@ -142,3 +146,17 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'core.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'APP': {
+            'client_id': 'fe490960426ae5726834',
+            'secret': '46ed7d59b90b4db656529c55bc01eca66af6bc22',
+        }
+    }
+}

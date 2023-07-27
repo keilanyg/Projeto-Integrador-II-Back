@@ -10,3 +10,4 @@ class BibliotecarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bibliotecario
         fields = '__all__'
+        

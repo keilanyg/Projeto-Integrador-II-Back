@@ -7,6 +7,13 @@ from datetime import date, timedelta
 from livros.models import Emprestimo
 from rest_framework.response import Response
 from django.contrib.auth.models import Group
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
 
 from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import (
@@ -35,15 +42,6 @@ class user(ModelViewSet):
         user.groups.add(grupo)
         return Response("ok") 
 
-    """def emprestimos_user(request):
-        usuario = request.user  # Obtém o usuário atualmente logado
-        emprestimos = Emprestimo.objects.filter(usuario=usuario)
-
-        # Verificar se há empréstimos próximos à data de devolução
-        for emprestimo in emprestimos:
-            if emprestimo.data_devolucao - date.today() <= timedelta(days=5):
-                emprestimo.alerta_devolucao = True
-                emprestimo.save()"""
 
     def criar_perfil_bibliotecario(request):
         if request.method == 'POST':
@@ -52,3 +50,4 @@ class user(ModelViewSet):
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors)
+        
