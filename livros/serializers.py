@@ -25,7 +25,7 @@ class LivrosSerializer(serializers.ModelSerializer):
     categoria_obj = serializers.SerializerMethodField('show_categoria')
     class Meta:
         model = Livro
-        fields = ['nome_livro','data_cadastro', 'data_lancamento', 'quantidade', 'descricao_livro', 'categoria', 'editora',  'autor','autor_obj', 'cover'
+        fields = ['id', 'nome_livro','data_cadastro', 'data_lancamento', 'quantidade', 'descricao_livro', 'categoria', 'editora',  'autor','autor_obj', 'cover'
                   ,'editora_obj', 'categoria_obj']
         
     def show_autor(self, instance):
@@ -43,13 +43,6 @@ class LivrosSerializer(serializers.ModelSerializer):
         serializer = CategoriaSerializer(categoria)
         return serializer.data
     
-    def quantidade_emprestado(self):
-        obj =(Emprestimo.objects.filter)
-        quant = self.emp
-        num_emprestado = quant -1
-        num_disponivel = quant - num_emprestado
-        return("Quantidade de livros emprestados", num_emprestado, " Quantidade disponivel ", num_disponivel)
-    
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -60,7 +53,7 @@ class EmprestimosSerializer(serializers.ModelSerializer):
     nome_emprestado_usuario_obj = serializers.SerializerMethodField('show_nome_emprestado_usuario')
     class Meta:
         model = Emprestimo
-        fields = ['nome_emprestado_usuario', 'livro', 'data_emprestimo',  'livro_obj', 'nome_emprestado_usuario_obj'
+        fields = ['id', 'nome_emprestado_usuario', 'livro', 'data_emprestimo',  'livro_obj', 'nome_emprestado_usuario_obj'
                   ]
         
     def show_livro(self, instance):
@@ -77,7 +70,7 @@ class DevolucaoSerializer(serializers.ModelSerializer):
     usuario_devolucao_obj = serializers.SerializerMethodField('show_usuario_devolucao')
     class Meta:
         model = Devolucao
-        fields = ['emprestimo', 'usuario_devolucao', 'data_devolucao',
+        fields = ['id', 'emprestimo', 'usuario_devolucao', 'data_devolucao',
                   'usuario_devolucao_obj']
     
     def show_usuario_devolucao(self, instance):
