@@ -1,0 +1,82 @@
+{% extends "account/base.html" %}
+
+{%load static %}
+
+
+{% load i18n %}
+{% load account socialaccount %}
+
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; justify-content: center; 
+margin: 80px 30px ; color: #fff; ">
+
+  <div
+    style=" background-color: #EDD6A0; width: 30%; padding: 10% 5%; font-size: 20px; border-radius: 40px 0 0 40px; color: #8C5C3D;">
+    <h1>Bem vindo ao<br />Acervo Bibliográfico!</h1>
+  </div>
+
+  <div style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  padding: 1.8%;
+  background-color: #8C5C3D;
+  border-radius: 0 40px 40px 0;
+  ">
+    <div>
+      <form class="login" method="POST" style=" font-size: 16px; " action="{% url 'account_login' %}">
+        <h3>Faça login com uma de suas<br />contas existentes.</h3>
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <a style="color: #fff;" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+
+        <button style="margin-top: 15px;
+  width: 200px;
+  height: 36px;
+  background: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: 0.1s ease;
+  cursor: pointer;
+  color: #8C5C3D;
+  font-size: 15px; margin-left: 20%; " class="primaryAction" type="submit">{% trans "Sign In" %}</button><br />
+      </form>
+    </div>
+    <div>
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+      <p>{% blocktrans with site.name as site_name %}
+        Não tem uma conta ? <a style="color: #fff;" href="{{ signup_url }}">cadastre-se</a><br />
+        Ou logue com:{% endblocktrans %}
+      </p>
+
+      <div class="socialaccount_ballot">
+        <div class="socialaccount_providers">
+          {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </div>
+      </div>
+      {% include "socialaccount/snippets/login_extra.html" %}
+      {% else %}
+      <p>{% blocktrans %}If you have not created an account yet, then please
+        <a href="{{ signup_url }}">sign up
+        </a> first.{% endblocktrans %}
+      </p>
+      {% endif %}
+
+    </div>
+
+
+  </div>
+
+</div>
+{% endblock %}

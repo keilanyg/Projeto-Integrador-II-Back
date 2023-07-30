@@ -1,0 +1,55 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; align-items: center; justify-content: center; 
+margin: 80px 30px ; color: #fff;">
+
+  <div
+    style=" background-color: #EDD6A0; width: 30%; padding: 10% 5%; font-size: 20px; border-radius: 40px 0 0 40px; color: #8C5C3D;">
+    <h1>Bem vindo ao<br />Acervo Bibliográfico!</h1>
+  </div>
+
+  <div style="
+  align-items: center;
+  width: 40%;
+  padding: 4% 2%;
+  background-color: #8C5C3D;
+  border-radius: 0 40px 40px 0;
+  align-items: center;">
+    <h1 style="margin-left: 100px;">Inscreva-se</h1>
+
+    <p style="margin-left: 100px;">{% blocktrans %}Já tem uma conta? Então, por favor <a style="color: #fff;"
+        href="{{ login_url }}">faça
+        Login</a>.{% endblocktrans %}
+    </p>
+
+    <form class="signup" style=" font-size: 16px; margin-left: 100px;" id="signup_form" method="post"
+      action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button style="margin-top: 15px;
+      width: 200px;
+      height: 36px;
+      background: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      transition: 0.1s ease;
+      cursor: pointer;
+      color: #8C5C3D;
+      font-size: 15px; margin-left: 20%; " type="submit">{% trans "Sign Up" %} &raquo;</button>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

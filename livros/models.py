@@ -84,17 +84,17 @@ class Emprestimo(models.Model):
         return super().post(request, *args, **kwargs)
     
     
-def verificar_livros_emprestados():
+""" def verificar_livros_emprestados():
         
     total_livros = Livro.objects.count()
     livros_emprestados = Emprestimo.objects.count()
 
-    return livros_emprestados
+    return livros_emprestados """
 
 # Chamada da função para obter o número de livros emprestados
-livros_emprestados = verificar_livros_emprestados()
+""" livros_emprestados = verificar_livros_emprestados()
 
-print(f"Total de livros emprestados: {livros_emprestados}")
+print(f"Total de livros emprestados: {livros_emprestados}") """
 
 class Devolucao(models.Model):
     

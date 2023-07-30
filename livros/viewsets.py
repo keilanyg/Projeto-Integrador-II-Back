@@ -56,7 +56,8 @@ class livro(ModelViewSet):
                 print (user)
       
       
-class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, 
+                 mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Emprestimo.objects.all()
     serializer_class = EmprestimosSerializer
     filter_class = EmprestimoFilter
@@ -77,11 +78,11 @@ class emprestimo(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListMo
         return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
         
 
-class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
+class devolucao(mixins.CreateModelMixin, mixins.UpdateModelMixin, 
+                mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Devolucao.objects.all()
     serializer_class = DevolucaoSerializer
     filter_class = DevolucaoFilter
-    
     
     def devolver(self, livro):
         try:

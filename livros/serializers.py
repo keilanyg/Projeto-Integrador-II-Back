@@ -68,15 +68,23 @@ class EmprestimosSerializer(serializers.ModelSerializer):
         
 class DevolucaoSerializer(serializers.ModelSerializer):
     usuario_devolucao_obj = serializers.SerializerMethodField('show_usuario_devolucao')
+    emprestimo_obj = serializers.SerializerMethodField('show_emprestimo')
     class Meta:
         model = Devolucao
-        fields = ['id', 'emprestimo', 'usuario_devolucao', 'data_devolucao',
+        fields = ['id', 'emprestimo', 'emprestimo_obj', 'usuario_devolucao', 'data_devolucao',
                   'usuario_devolucao_obj']
     
     def show_usuario_devolucao(self, instance):
         usuario_devolucao = User.objects.get(id=instance.usuario_devolucao.id)
         serializer = UserSerializer(usuario_devolucao)
         return serializer.data
+    
+    def show_emprestimo(self, instance):
+        emprestimo = Emprestimo.objects.get(id=instance.emprestimo.id)
+        serializer = EmprestimosSerializer(emprestimo)
+        return serializer.data
+    
+    
     
     
     

@@ -1,5 +1,10 @@
 from pathlib import Path, os
 
+import environ 
+
+env = environ.Env()
+environ.Env.read_env()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-1qd%bcibva7o&c8$zyqmh1^8i1(y68(ks29j9let*mnq_l*)j3'
@@ -17,16 +22,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'django.contrib.sites',
     'rest_framework',
-    
     'livros',
-    'core',
-    
+    'core',    
     'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    
     'dj_rest_auth',
     'allauth',
     'allauth.account',
@@ -64,7 +67,7 @@ ROOT_URLCONF = 'Biblioteca.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,8 +86,13 @@ WSGI_APPLICATION = 'Biblioteca.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST':'localhost',
+        'PORT': '5432'
+        
     }
 }
 
@@ -128,6 +136,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'templates/static'),)
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
