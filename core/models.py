@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -50,3 +53,19 @@ class Bibliotecario(models.Model):
     def __str__(self):
         return f'{self.nome} - {self.endereco}'
     
+class GitHubUserViewSet(models.Model):
+    def post(self, request, *args, **kwargs):
+        try:
+            github_username = request.data.get('github_username')
+            # Outras informações que você deseja salvar
+
+            # Verifique se o usuário já existe no banco de dados com base no github_username
+            user_profile, created = User.objects.get_or_create(github_username=github_username)
+            # Salve outras informações relevantes no UserProfile
+
+            return Response({'message': 'Informações do usuário salvas com sucesso.'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'message': 'Ocorreu um erro ao salvar as informações do usuário.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+
