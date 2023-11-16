@@ -1,18 +1,23 @@
 from django.db import models
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from django.http import request
+from core.models import User
+from rest_framework.permissions import IsAuthenticated
+from core.permissions import IsAdministradores, IsBibliotecario, IsUsuarios
 
 
 class Categoria(models.Model):
+    #permission_class = [IsAuthenticated & (IsBibliotecario)]
     nome_categoria = models.CharField(max_length=50, verbose_name="Categoria")
-    
+
     def __str__(self):
         return self.nome_categoria
 
-    @method_decorator(permission_required('livros.adicionar_categoria'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
  
 class Editora(models.Model):
@@ -21,12 +26,13 @@ class Editora(models.Model):
     def __str__(self):
         return self.nome_editora
     
-    @method_decorator(permission_required('livros.adicionar_editora'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 class Autor(models.Model):
+    
     class Meta: 
         verbose_name_plural = "Autores"
     
@@ -35,10 +41,10 @@ class Autor(models.Model):
     def __str__(self):
         return self.nome_autor
     
-    @method_decorator(permission_required('livros.adicionar_autor'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 
 class Livro(models.Model):
@@ -50,43 +56,34 @@ class Livro(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora")
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor")
-    livro_imagem = models.ImageField
+    cover = models.ImageField() #campo para receber imagem que vai colocar dentro da pasta livros/cover junto com o ano, mês e dia
     
     def __str__(self):
         return self.nome_livro
     
-    def quantidade_emprestado(quantidade):
-        pass 
     
-    @method_decorator(permission_required('livros.adicionar_livro'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    
     
 
 """@permission_required('livros.adicionar_emprestimo') """  
 class Emprestimo(models.Model):
-    choices = (
-        ('P', 'Péssimo'),
-        ('R', 'Ruim'),
-        ('B', 'Bom'),
-        ('O', 'Ótimo')
-    )
-    nome_emprestado_usuario = models.CharField(max_length=150, verbose_name="Nome Usuário Cadastrado")
+    nome_emprestado_usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário Cadastrado")
     data_emprestimo = models.DateField(verbose_name="Data de Empréstimo", auto_now_add=True)
-    data_devolucao = models.DateField(verbose_name="Data de Devolução")
-    avaliacao = models.CharField(max_length=1, choices=choices, null=True, blank=True)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro")
- 
-    def __str__(self):
-        return self.nome_emprestado_usuario
     
-    @method_decorator(permission_required('livros.adicionar_emprestimo'))
-    def save(self, *args, **kwargs):
-        # salvando informacoes no db
-        super().save(*args, **kwargs)
-  
- 
+    def __str__(self):
+        return str(f"LIVRO: {self.livro} - USUÁRIO: {self.nome_emprestado_usuario}")
+    
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    
 def verificar_livros_emprestados():
         
     total_livros = Livro.objects.count()
@@ -98,3 +95,20 @@ def verificar_livros_emprestados():
 livros_emprestados = verificar_livros_emprestados()
 
 print(f"Total de livros emprestados: {livros_emprestados}")
+
+class Devolucao(models.Model):
+    
+    emprestimo = models.OneToOneField('livros.Emprestimo', on_delete=models.CASCADE, verbose_name="Livro")
+    usuario_devolucao = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário de Devolução")
+    data_devolucao = models.DateField(verbose_name="Data de Devolução")
+    
+
+    def __str__(self):
+        return f"Devolução {self.emprestimo}"
+
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+    
+    

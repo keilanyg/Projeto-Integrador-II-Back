@@ -1,12 +1,14 @@
 from django_filters import rest_framework as filters
 from django_filters import FilterSet
+from datetime import timezone, timedelta
+from dateutil.relativedelta import relativedelta 
 
-from .models import Livro, Categoria, Editora, Autor
+from .models import Livro, Categoria, Editora, Autor, Emprestimo, Devolucao
 from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
-from .serializers import LivrosSerializer, CategoriaSerializer, AutorSerializer, EditoraSerializer
+from .serializers import LivrosSerializer, CategoriaSerializer, AutorSerializer, EditoraSerializer, DevolucaoSerializer
 
 class LivroFilter(FilterSet):
     class Meta:
@@ -68,3 +70,38 @@ class EditoraViewSet(viewsets.ModelViewSet):
     filterset_class = EditoraFilter
     search_fields = ['editora']
     
+class EmprestimoFilter(filters.FilterSet):
+    period = filters.CharFilter(method='filter_by_period')
+
+    def filter_by_period(self, queryset, name, value):
+        today = timezone.now().date()
+        if value == 'day':
+            return queryset.filter(data_emprestimo=today)
+        elif value == 'week':
+            week_start = today - timedelta(days=today.weekday())
+            week_end = week_start + timedelta(days=6)
+            return queryset.filter(data_emprestimo__range=[week_start, week_end])
+        elif value == 'month':
+            month_start = today.replace(day=1)
+            month_end = (month_start + relativedelta(months=1)) - timedelta(days=1)
+            return queryset.filter(data_emprestimo__range=[month_start, month_end])
+        return queryset
+
+    class Meta:
+        model = Emprestimo
+        fields = ['period']
+        
+class DevolucaoFilter(FilterSet):
+    class Meta:
+        model = Devolucao
+        fields = {
+            'emprestimo': ['exact'],
+        }
+   
+        
+class DevolucaoViewSet(viewsets.ModelViewSet):
+    queryset = Devolucao.objects.all()
+    serializer_class = DevolucaoSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = DevolucaoFilter
+    search_fields = ['emprestimo']

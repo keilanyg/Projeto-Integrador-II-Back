@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import Path, os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -6,7 +6,8 @@ SECRET_KEY = 'django-insecure-1qd%bcibva7o&c8$zyqmh1^8i1(y68(ks29j9let*mnq_l*)j3
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS=True
 
 # Application definition
 INSTALLED_APPS = [
@@ -17,18 +18,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    
     'livros',
     'core',
     
+    'corsheaders',
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    
     'dj_rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     
     'django_filters',
 ]
@@ -42,16 +47,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 ]
 
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
-    
 }
 
 ROOT_URLCONF = 'Biblioteca.urls'
@@ -122,7 +127,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -135,4 +140,23 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Biblioteca',
     'DESCRIPTION': 'API com os Endpoints',
     'VERSION': '1.0.0',
+}
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'core.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'APP': {
+            'client_id': 'fe490960426ae5726834',
+            'secret': '46ed7d59b90b4db656529c55bc01eca66af6bc22',
+        }
+    }
 }
