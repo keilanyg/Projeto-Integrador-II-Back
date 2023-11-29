@@ -4,7 +4,7 @@ from rest_framework.viewsets import GenericViewSet
 from livros.models import Categoria, Editora, Autor, Livro, Emprestimo, Devolucao
 from livros.serializers import CategoriaSerializer, EditoraSerializer, AutorSerializer, LivrosSerializer, EmprestimosSerializer, DevolucaoSerializer
 from .filters import LivroFilter, CategoriaFilter, AutorFilter, EditoraFilter, EmprestimoFilter, DevolucaoFilter
-from rest_framework import generics
+#from rest_framework import generics
 from rest_framework.filters import SearchFilter
 import datetime
 from rest_framework.response import Response
