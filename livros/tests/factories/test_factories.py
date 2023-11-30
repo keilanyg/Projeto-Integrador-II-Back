@@ -1,6 +1,6 @@
-"""from django.test import TestCase
-from .factories import AutorFactory, LivroFactory
-from livros.models import Autor, Livro
+from django.test import TestCase
+from .factories import AutorFactory, LivroFactory, EditoraFactory
+from livros.models import Autor, Livro, Editora, Categoria
 
 class CategoriaTestCase(TestCase):
     def test_livro_creation(self):
@@ -11,4 +11,9 @@ class CategoriaTestCase(TestCase):
         self.assertIsInstance(autor, Autor)
         self.assertIsInstance(livro, Livro)
         
-"""
+class EditoraTestCase(TestCase):
+    def test_editora_creation(self):
+        editora = EditoraFactory()
+        #verificando a criação
+        self.assertIsInstance(editora, Editora)
+        

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..viewsets import categoria, autor, livro, devolucao, emprestimo
+from ...viewsets import categoria, autor, livro, devolucao, emprestimo
 
 class categoriaViewTesteCase(TestCase):
     
