@@ -3,7 +3,7 @@ from livros.viewsets import categoria, editora, autor, livro, emprestimo, devolu
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name = 'livros'
 router.register("categoria", categoria)
 router.register("editora", editora)
 router.register("autor", autor)
