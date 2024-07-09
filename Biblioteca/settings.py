@@ -163,5 +163,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': 'fe490960426ae5726834',
             'secret': '46ed7d59b90b4db656529c55bc01eca66af6bc22',
         }
+    },
+    
+        
     }
-}
+
+

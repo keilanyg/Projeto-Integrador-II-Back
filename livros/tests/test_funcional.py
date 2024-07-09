@@ -1,12 +1,6 @@
 from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
 from rest_framework.test import APIClient
-from livros.models import Categoria, Editora, Autor, Livro
-
-        
-from django.test import TestCase
-from django.urls import reverse  # Se você ainda precisar importar reverse
+from livros.models import Categoria, Editora, Autor, Livro  
 from rest_framework import status
 from rest_framework.test import APIClient
 from livros.models import Categoria, Editora, Autor, Livro

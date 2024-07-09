@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .factories.test_factories import CategoriaFactory, AutorFactory, EditoraFactory, LivroFactory
+from ..factories.test_factories import CategoriaFactory, AutorFactory, EditoraFactory, LivroFactory
 import graphene
 from graphene_django.types import DjangoObjectType
 from livros.models import Livro
