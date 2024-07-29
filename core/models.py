@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    username = models.CharField(max_length=15)
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 

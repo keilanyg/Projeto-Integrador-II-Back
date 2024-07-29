@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     
     'django_filters',
+    
+    
 ]
 SITE_ID = 1
 
@@ -49,6 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    
+    
 
 ]
 
