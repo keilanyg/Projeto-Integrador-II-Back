@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    'django_admin_logs',
     
     'dj_rest_auth',
     'allauth',
@@ -129,6 +130,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 AUTH_USER_MODEL = 'core.User'
 
 LANGUAGE_CODE = 'en-us'
+
+# LOGS DE AUDITORIA
+DJANGO_ADMIN_LOGS_DELETABLE = True
+
+DJANGO_ADMIN_LOGS_ENABLED = True
+
 
 TIME_ZONE = 'UTC'
 
