@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import User
+from auditlog.registry import auditlog
 
 
 class Categoria(models.Model):
@@ -65,3 +66,9 @@ class Devolucao(models.Model):
 
     def __str__(self):
         return f"Devolução {self.emprestimo}"
+
+
+auditlog.register(Categoria)
+auditlog.register(Livro)
+auditlog.register(Autor)
+auditlog.register(Editora)

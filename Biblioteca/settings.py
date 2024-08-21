@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     
     'django_filters',
+    'auditlog',
     
     
 ]
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     
+    
+    'auditlog.middleware.AuditlogMiddleware'
     
 
 ]
