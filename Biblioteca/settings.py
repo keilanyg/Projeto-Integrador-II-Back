@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     
     'django_filters',
@@ -177,9 +177,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': 'fe490960426ae5726834',
             'secret': '46ed7d59b90b4db656529c55bc01eca66af6bc22',
         }
-    },
-    
-        
+    },  
     }
 
 
