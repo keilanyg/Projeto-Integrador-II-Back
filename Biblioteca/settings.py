@@ -174,8 +174,8 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'APP': {
-            'client_id': 'fe490960426ae5726834',
-            'secret': '46ed7d59b90b4db656529c55bc01eca66af6bc22',
+            'client_id': 'Ov23liCC4Wz9BdW5RjjX',
+            'secret': '1f54199ac533f842f5bd7093144f6dcd120973ff',
         }
     },  
     }
