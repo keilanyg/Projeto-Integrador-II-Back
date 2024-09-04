@@ -96,6 +96,31 @@ class EditoraViewSet(ModelViewSet):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
 
+    def list(self, request, *args, **kwargs):
+        editoras = []
+        response_editora_list_ifrn = requests.get('http://127.0.0.1:8001/api/editora/')
+        response_editora_list_uern = requests.get('http://127.0.0.1:8002/api/editora/')
+        response_editora_list_ufersa = requests.get('http://127.0.0.1:8003/api/editora/')
+
+        for editora in response_editora_list_ifrn.json():
+            if not editora['nome_editora'] == '':
+                editoras.append(editora)
+        for editora in response_editora_list_uern.json():
+            if not editora['nome_editora'] == '':
+                editoras.append(editora)
+        for editora in response_editora_list_ufersa.json():
+            if not editora['nome_editora'] == '':
+                editoras.append(editora)
+        
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        
+        for editora in serializer.data:
+            if not editora['nome_editora'] == '':
+                editoras.append(editora)
+
+        return Response(editoras)
+    
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
