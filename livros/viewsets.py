@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins, permissions, status
 from rest_framework.filters import SearchFilter
+from rest_framework.request import Request
 from rest_framework.response import Response
 import datetime 
 from django.http import JsonResponse
+import requests
 
 from livros.models import *
 from livros.serializers import *
@@ -22,6 +24,31 @@ class CategoriaViewSet(ModelViewSet):
     filterset_class = CategoriaFilter
     filter_backends = (SearchFilter,)
     search_fields = ('nome_categoria',)
+
+    def list(self, request, *args, **kwargs):
+        categorias = []
+        response_categoria_list_ifrn = requests.get('http://127.0.0.1:8001/api/categoria/')
+        response_categoria_list_uern = requests.get('http://127.0.0.1:8002/api/categoria/')
+        response_categoria_list_ufersa = requests.get('http://127.0.0.1:8003/api/categoria/')
+
+        for categoria in response_categoria_list_ifrn.json():
+            if not categoria['nome_categoria'] == '':
+                categorias.append(categoria)
+        for categoria in response_categoria_list_uern.json():
+            if not categoria['nome_categoria'] == '':
+                categorias.append(categoria)
+        for categoria in response_categoria_list_ufersa.json():
+            if not categoria['nome_categoria'] == '':
+                categorias.append(categoria)
+        
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        
+        for categoria in serializer.data:
+            if not categoria['nome_categoria'] == '':
+                categorias.append(categoria)
+
+        return Response(categorias)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -127,6 +154,44 @@ class LivroViewSet(ModelViewSet):
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
+    
+    def list(self, request, *args, **kwargs):
+        livros = []
+        response_livro_list_ifrn = requests.get('http://127.0.0.1:8001/api/livro/')
+        response_livro_list_uern = requests.get('http://127.0.0.1:8002/api/livro/')
+        response_livro_list_ufersa = requests.get('http://127.0.0.1:8003/api/livro/')
+        
+        for livro in response_livro_list_ifrn.json():
+            livros.append(livro)
+        for livro in response_livro_list_uern.json():
+            livros.append(livro)
+        for livro in response_livro_list_ufersa.json():
+            livros.append(livro)
+        
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        
+        for livro in serializer.data:
+            livros.append(livro)
+
+        return Response(livros)
+    
+    def retrieve(self, request: Request, pk: int, *args, **kwargs):
+        instituicao = request.query_params.get("instituicao")
+
+        if instituicao == "IFRN":
+            response_livro_list_ufersa = requests.get(f'http://127.0.0.1:8001/api/livro/{pk}/')
+            return Response(response_livro_list_ufersa.json())
+        
+        if instituicao == "UERN":
+            response_livro_list_ufersa = requests.get(f'http://127.0.0.1:8002/api/livro/{pk}/')
+            return Response(response_livro_list_ufersa.json())
+        
+        if instituicao == "UFERSA":
+            response_livro_list_ufersa = requests.get(f'http://127.0.0.1:8003/api/livro/{pk}/')
+            return Response(response_livro_list_ufersa.json())
+
+        return super().retrieve(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
