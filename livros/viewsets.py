@@ -133,6 +133,31 @@ class AutorViewSet(ModelViewSet):
     filter_backends = (SearchFilter,)
     search_fields = ('nome_autor',)
     
+    def list(self, request, *args, **kwargs):
+        autores = []
+        response_autor_list_ifrn = requests.get('http://127.0.0.1:8001/api/autor/')
+        response_autor_list_uern = requests.get('http://127.0.0.1:8002/api/autor/')
+        response_autor_list_ufersa = requests.get('http://127.0.0.1:8003/api/autor/')
+
+        for autor in response_autor_list_ifrn.json():
+            if not autor['nome_autor'] == '':
+                autores.append(autor)
+        for autor in response_autor_list_uern.json():
+            if not autor['nome_autor'] == '':
+                autores.append(autor)
+        for autor in response_autor_list_ufersa.json():
+            if not autor['nome_autor'] == '':
+                autores.append(autor)
+        
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        
+        for autor in serializer.data:
+            if not autor['nome_autor'] == '':
+                autores.append(autor)
+
+        return Response(autores)
+    
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -149,6 +174,7 @@ class AutorViewSet(ModelViewSet):
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
+    
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
