@@ -26,25 +26,25 @@ class CategoriaViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         categorias = []
-        # response_categoria_list_ifrn = requests.get(
-        #     "http://127.0.0.1:8001/api/categoria/"
-        # )
-        # response_categoria_list_uern = requests.get(
-        #     "http://127.0.0.1:8002/api/categoria/"
-        # )
-        # response_categoria_list_ufersa = requests.get(
-        #     "http://127.0.0.1:8003/api/categoria/"
-        # )
+        response_categoria_list_ifrn = requests.get(
+            "http://127.0.0.1:8001/api/categoria/"
+        )
+        response_categoria_list_uern = requests.get(
+            "http://127.0.0.1:8002/api/categoria/"
+        )
+        response_categoria_list_ufersa = requests.get(
+            "http://127.0.0.1:8003/api/categoria/"
+        )
 
-        # for categoria in response_categoria_list_ifrn.json():
-        #     if not categoria["nome_categoria"] == "":
-        #         categorias.append(categoria)
-        # for categoria in response_categoria_list_uern.json():
-        #     if not categoria["nome_categoria"] == "":
-        #         categorias.append(categoria)
-        # for categoria in response_categoria_list_ufersa.json():
-        #     if not categoria["nome_categoria"] == "":
-        #         categorias.append(categoria)
+        for categoria in response_categoria_list_ifrn.json():
+            if not categoria["nome_categoria"] == "":
+                categorias.append(categoria)
+        for categoria in response_categoria_list_uern.json():
+            if not categoria["nome_categoria"] == "":
+                categorias.append(categoria)
+        for categoria in response_categoria_list_ufersa.json():
+            if not categoria["nome_categoria"] == "":
+                categorias.append(categoria)
 
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -155,19 +155,19 @@ class AutorViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         autores = []
-        # response_autor_list_ifrn = requests.get("http://127.0.0.1:8001/api/autor/")
-        # response_autor_list_uern = requests.get("http://127.0.0.1:8002/api/autor/")
-        # response_autor_list_ufersa = requests.get("http://127.0.0.1:8003/api/autor/")
+        response_autor_list_ifrn = requests.get("http://127.0.0.1:8001/api/autor/")
+        response_autor_list_uern = requests.get("http://127.0.0.1:8002/api/autor/")
+        response_autor_list_ufersa = requests.get("http://127.0.0.1:8003/api/autor/")
 
-        # for autor in response_autor_list_ifrn.json():
-        #     if not autor["nome_autor"] == "":
-        #         autores.append(autor)
-        # for autor in response_autor_list_uern.json():
-        #     if not autor["nome_autor"] == "":
-        #         autores.append(autor)
-        # for autor in response_autor_list_ufersa.json():
-        #     if not autor["nome_autor"] == "":
-        #         autores.append(autor)
+        for autor in response_autor_list_ifrn.json():
+            if not autor["nome_autor"] == "":
+                autores.append(autor)
+        for autor in response_autor_list_uern.json():
+            if not autor["nome_autor"] == "":
+                autores.append(autor)
+        for autor in response_autor_list_ufersa.json():
+            if not autor["nome_autor"] == "":
+                autores.append(autor)
 
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -231,16 +231,16 @@ class LivroViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         livros = []
-        # response_livro_list_ifrn = requests.get("http://127.0.0.1:8001/api/livro/")
-        # response_livro_list_uern = requests.get("http://127.0.0.1:8002/api/livro/")
-        # response_livro_list_ufersa = requests.get("http://127.0.0.1:8003/api/livro/")
+        response_livro_list_ifrn = requests.get("http://127.0.0.1:8001/api/livro/")
+        response_livro_list_uern = requests.get("http://127.0.0.1:8002/api/livro/")
+        response_livro_list_ufersa = requests.get("http://127.0.0.1:8003/api/livro/")
 
-        # for livro in response_livro_list_ifrn.json():
-        #     livros.append(livro)
-        # for livro in response_livro_list_uern.json():
-        #     livros.append(livro)
-        # for livro in response_livro_list_ufersa.json():
-        #     livros.append(livro)
+        for livro in response_livro_list_ifrn.json():
+            livros.append(livro)
+        for livro in response_livro_list_uern.json():
+            livros.append(livro)
+        for livro in response_livro_list_ufersa.json():
+            livros.append(livro)
 
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -253,23 +253,23 @@ class LivroViewSet(ModelViewSet):
     def retrieve(self, request: Request, pk: int, *args, **kwargs):
         instituicao = request.query_params.get("instituicao")
 
-        # if instituicao == "IFRN":
-        #     response_livro_list_ufersa = requests.get(
-        #         f"http://127.0.0.1:8001/api/livro/{pk}/"
-        #     )
-        #     return Response(response_livro_list_ufersa.json())
+        if instituicao == "IFRN":
+            response_livro_list_ufersa = requests.get(
+                f"http://127.0.0.1:8001/api/livro/{pk}/"
+            )
+            return Response(response_livro_list_ufersa.json())
 
-        # if instituicao == "UERN":
-        #     response_livro_list_ufersa = requests.get(
-        #         f"http://127.0.0.1:8002/api/livro/{pk}/"
-        #     )
-        #     return Response(response_livro_list_ufersa.json())
+        if instituicao == "UERN":
+            response_livro_list_ufersa = requests.get(
+                f"http://127.0.0.1:8002/api/livro/{pk}/"
+            )
+            return Response(response_livro_list_ufersa.json())
 
-        # if instituicao == "UFERSA":
-        #     response_livro_list_ufersa = requests.get(
-        #         f"http://127.0.0.1:8003/api/livro/{pk}/"
-        #     )
-        #     return Response(response_livro_list_ufersa.json())
+        if instituicao == "UFERSA":
+            response_livro_list_ufersa = requests.get(
+                f"http://127.0.0.1:8003/api/livro/{pk}/"
+            )
+            return Response(response_livro_list_ufersa.json())
 
         return super().retrieve(request, *args, **kwargs)
 

@@ -32,7 +32,7 @@ class Livro(models.Model):
     data_cadastro = models.DateField(auto_now_add=True, verbose_name="Data de Cadastro")
     data_lancamento = models.DateField(verbose_name="Data de Lançamento")
     quantidade = models.IntegerField(verbose_name="Quantidade")
-    descricao_livro = models.TextField(max_length=200, verbose_name="Descrição do Livro", blank=True, null=True)
+    descricao_livro = models.TextField(max_length=70, verbose_name="Descrição do Livro", blank=True, null=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, verbose_name="Categoria")
     editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora")
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor")
