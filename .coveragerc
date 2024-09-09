@@ -1,3 +1,8 @@
+GITHUB_CLIENT_ID=Ov23liCC4Wz9BdW5RjjX
+GITHUB_CLIENT_SECRET=1f54199ac533f842f5bd7093144f6dcd120973ff
+
+FRONT_END_URL=http://localhost:3000
+
 [run]
 
 source = livro
